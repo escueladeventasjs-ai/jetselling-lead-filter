@@ -141,3 +141,12 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 .vite/
+
+# Vercel
+.vercel
+
+# macOS
+.DS_Store
+
+# pnpm logs
+pnpm-debug.log*
