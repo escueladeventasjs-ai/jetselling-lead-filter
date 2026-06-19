@@ -16,6 +16,7 @@ Asistente de prediagnóstico para JetSelling® creado con Next.js App Router. La
   - Soporte campus
   - No encaja ahora
 - Generación de resumen listo para WhatsApp cuando hay contexto suficiente.
+- Handoff humano para empresas, equipos, workshops y FUNDAE con el botón “Contactar con Natalia por WhatsApp”.
 
 ## Lógica de recomendación para particulares
 
@@ -33,7 +34,6 @@ Con ese contexto recomienda una única opción principal y, solo si tiene sentid
 - **Programa Base JetSelling®**: cuando no parece una habilidad aislada, sino falta de estructura general, método o una ruta completa de entrenamiento comercial.
 
 La respuesta de `/api/chat` incluye `recommended_product`. Si `recommended_product.show` es `true`, el frontend muestra una tarjeta de **Entrenamiento recomendado** con el nombre, la razón, el botón principal “Ver entrenamiento recomendado” y el botón secundario “Contactar con Natalia por WhatsApp”.
-
 
 ## Respuesta de `/api/chat`
 
