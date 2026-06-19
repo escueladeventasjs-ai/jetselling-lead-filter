@@ -43,6 +43,13 @@ export default function Home() {
     return lastResponse.whatsapp_url || `https://wa.me/?text=${encodeURIComponent(lastResponse.whatsapp_summary)}`;
   }, [lastResponse]);
 
+  const shouldShowRecommendation = Boolean(
+    lastResponse?.recommended_product?.show &&
+      lastResponse.recommended_product.name &&
+      lastResponse.recommended_product.reason &&
+      lastResponse.recommended_product.url,
+  );
+
   async function submitMessage(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault();
     const trimmedInput = input.trim();
@@ -101,7 +108,7 @@ export default function Home() {
           {isLoading ? (
             <div className="bubble-row assistant"><div className="bubble">Estoy revisando tu caso con calma…</div></div>
           ) : null}
-          {lastResponse?.recommended_product?.show ? (
+          {shouldShowRecommendation && lastResponse?.recommended_product ? (
             <div className="recommendation-card">
               <p className="recommendation-kicker">Entrenamiento recomendado</p>
               <h2>{lastResponse.recommended_product.name}</h2>
@@ -116,7 +123,7 @@ export default function Home() {
               </div>
             </div>
           ) : null}
-          {lastResponse?.ready_for_handoff && !lastResponse.recommended_product?.show ? (
+          {lastResponse?.ready_for_handoff && !shouldShowRecommendation ? (
             <div className="handoff-panel">
               <p>{lastResponse.recommended_next_step}</p>
               <div className="actions">

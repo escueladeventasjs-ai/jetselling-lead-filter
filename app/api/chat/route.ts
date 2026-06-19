@@ -108,6 +108,10 @@ function sanitizePayload(payload: Partial<AssistantPayload>): AssistantPayload {
   const safeProductType = productTypes.includes(product.type as RecommendedProduct['type'])
     ? (product.type as RecommendedProduct['type'])
     : 'none';
+  const productName = typeof product.name === 'string' ? product.name.trim() : '';
+  const productReason = typeof product.reason === 'string' ? product.reason.trim() : '';
+  const productUrl = typeof product.url === 'string' ? product.url.trim() : '';
+  const shouldShowProduct = Boolean(product.show && productName && productReason && productUrl);
 
   return {
     reply: typeof payload.reply === 'string' && payload.reply.trim() ? payload.reply.trim() : fallbackPayload().reply,
@@ -122,11 +126,11 @@ function sanitizePayload(payload: Partial<AssistantPayload>): AssistantPayload {
         ? payload.whatsapp_summary.trim()
         : 'Solicitud recibida desde el asistente de JetSelling® pendiente de completar.',
     recommended_product: {
-      show: Boolean(product.show),
-      name: typeof product.name === 'string' ? product.name.trim() : '',
-      type: safeProductType,
-      reason: typeof product.reason === 'string' ? product.reason.trim() : '',
-      url: typeof product.url === 'string' ? product.url.trim() : '',
+      show: shouldShowProduct,
+      name: productName,
+      type: shouldShowProduct ? safeProductType : 'none',
+      reason: productReason,
+      url: productUrl,
       cta_label: typeof product.cta_label === 'string' && product.cta_label.trim() ? product.cta_label.trim() : 'Ver entrenamiento recomendado',
     },
   };
@@ -141,7 +145,7 @@ export async function POST(request: NextRequest) {
       .slice(-20);
 
     if (!process.env.OPENAI_API_KEY) {
-      return NextResponse.json(fallbackPayload('Ahora mismo falta configurar la conexión del asistente. Si quieres, deja aquí una frase con tu caso y podrás enviársela a Natalia cuando esté activo.'), { status: 500 });
+      return NextResponse.json(fallbackPayload('Ahora mismo no puedo completar la orientación automática. Si quieres, deja aquí una frase con tu caso y podrás compartirla con Natalia por WhatsApp.'), { status: 500 });
     }
 
     const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
