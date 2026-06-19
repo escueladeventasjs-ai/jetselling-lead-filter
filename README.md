@@ -32,7 +32,7 @@ Con ese contexto recomienda una única opción principal y, solo si tiene sentid
 - **Catálogo de entrenamientos de ventas B2B**: cuando la persona no tiene claro el bloqueo o quiere comparar opciones.
 - **Programa Base JetSelling®**: cuando no parece una habilidad aislada, sino falta de estructura general, método o una ruta completa de entrenamiento comercial.
 
-La respuesta de `/api/chat` incluye `recommended_product`. Si `recommended_product.show` es `true`, el frontend muestra una tarjeta de **Entrenamiento recomendado** con el nombre, la razón y el enlace correspondiente.
+La respuesta de `/api/chat` incluye `recommended_product`. Si `recommended_product.show` es `true`, el frontend muestra una tarjeta de **Entrenamiento recomendado** con el nombre, la razón, el botón principal “Ver entrenamiento recomendado” y el botón secundario “Contactar con Natalia por WhatsApp”.
 
 
 ## Respuesta de `/api/chat`

@@ -108,7 +108,7 @@ export default function Home() {
               <p>{lastResponse.recommended_product.reason}</p>
               <div className="actions">
                 <a className="primary-button" href={lastResponse.recommended_product.url} target="_blank" rel="noreferrer">
-                  {lastResponse.recommended_product.cta_label || 'Ver entrenamiento recomendado'}
+                  Ver entrenamiento recomendado
                 </a>
                 <a className="secondary-button" href={whatsappHref} target="_blank" rel="noreferrer">
                   Contactar con Natalia por WhatsApp

@@ -65,7 +65,7 @@ Catálogo base para particulares:
 Para recommended_product:
 - show true solo cuando recomiendes un entrenamiento/catálogo concreto o una opción de soporte accionable.
 - type debe ser kit para Prospección o Negociación, programa_base para Programa Base, catalogo para el catálogo, soporte para soporte campus o none si no aplica.
-- cta_label debe ser "Ver entrenamiento recomendado" o "Ver este entrenamiento" para entrenamientos, "Ver catálogo de entrenamientos" para catálogo, y un texto útil para soporte.
+- cta_label debe ser "Ver entrenamiento recomendado" cuando show sea true para recomendaciones a particulares.
 
 Devuelve SIEMPRE y SOLO JSON válido con esta estructura exacta:
 {
@@ -127,7 +127,7 @@ function sanitizePayload(payload: Partial<AssistantPayload>): AssistantPayload {
       type: safeProductType,
       reason: typeof product.reason === 'string' ? product.reason.trim() : '',
       url: typeof product.url === 'string' ? product.url.trim() : '',
-      cta_label: typeof product.cta_label === 'string' && product.cta_label.trim() ? product.cta_label.trim() : 'Ver este entrenamiento',
+      cta_label: typeof product.cta_label === 'string' && product.cta_label.trim() ? product.cta_label.trim() : 'Ver entrenamiento recomendado',
     },
   };
 }
