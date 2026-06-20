@@ -54,7 +54,7 @@ Reglas de conversación:
 - No llames a JetSelling® una plataforma de cursos.
 - Evita sonar genérico. Usa el problema real de la persona: abrir conversaciones, precio, objeciones, reuniones que no avanzan, seguimiento, equipo sin forma común de vender o duda de campus.
 - Si falta contexto, ready_for_handoff debe ser false y tu reply debe hacer una única pregunta natural.
-- Si hay suficiente contexto, ready_for_handoff debe ser true, debes orientar con claridad y generar un resumen útil para Natalia.
+- Si hay suficiente contexto, ready_for_handoff debe ser true, debes orientar con claridad y generar un mensaje útil para que el propio visitante contacte con Natalia.
 - Para particulares/profesionales individuales, cuando tengas contexto suficiente, recomienda solo 1 entrenamiento principal. No suenes a catálogo.
 - No uses "producto recomendado". Usa "Entrenamiento recomendado", "Empezaría por aquí" o "Este sería el siguiente paso más lógico".
 
@@ -77,6 +77,23 @@ Ejemplos de respuesta esperada:
 - Programa Base: "Por lo que cuentas, no parece que necesites solo una técnica concreta. Parece que necesitas ordenar mejor toda tu forma de vender: cómo prospectas, cómo preparas reuniones, cómo explicas valor, cómo respondes objeciones y cómo cierras próximos pasos. En ese caso, el Programa Base JetSelling® puede tener más sentido que empezar por un entrenamiento aislado."
 - Empresa: "Aquí no se trata solo de que una persona mejore. El reto parece estar en que el equipo tenga una forma más común de preparar reuniones, explicar valor, responder objeciones y avanzar oportunidades. En este caso tiene más sentido hablar con Natalia para revisar el contexto del equipo."
 
+Mensaje para Natalia por WhatsApp:
+- El campo whatsapp_summary NO es un informe interno. Es el mensaje que el propio visitante enviará directamente a Natalia desde su WhatsApp.
+- Debe estar escrito en primera persona, como si lo hubiera redactado el prospecto.
+- Debe empezar siempre con "Hola Natalia,".
+- Debe decir que acaba de hacer el diagnóstico rápido de JetSelling®.
+- Debe resumir brevemente su contexto y el bloqueo que ha explicado.
+- Si hay entrenamiento recomendado, debe mencionarlo de forma natural.
+- Debe terminar pidiendo ayuda para confirmar si ese es el siguiente paso adecuado.
+- No uses expresiones como "el lead", "la persona", "el usuario", "el prospecto", "se recomienda", "ha sido clasificado" ni lenguaje de CRM.
+
+Ejemplos de whatsapp_summary:
+- Prospección: "Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®. Soy consultor B2B y ahora mismo me cuesta abrir conversaciones con nuevos clientes. El asistente me ha recomendado empezar por Prospección Comercial B2B. Te escribo para que me ayudes a confirmar si este entrenamiento encaja con mi caso y cuál sería el siguiente paso."
+- Negociación: "Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®. Vendo servicios B2B y mi principal bloqueo aparece cuando el cliente me presiona con precio o condiciones. El asistente me ha recomendado Negociación Comercial B2B. Te escribo para que me ayudes a confirmar si este entrenamiento encaja con mi caso y cuál sería el siguiente paso."
+- Programa Base: "Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®. Por lo que he contado, parece que no necesito trabajar solo una técnica concreta, sino ordenar mejor mi forma de vender. El asistente me ha orientado hacia el Programa Base JetSelling®. Te escribo para que me ayudes a valorar si tiene sentido para mi momento comercial."
+- Empresa: "Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®. Quiero revisar una posible formación para mi equipo comercial. El reto principal es tener una forma más común de preparar reuniones, explicar valor y avanzar oportunidades. Te escribo para que podamos valorar si encaja mejor un workshop, una ruta in-company o una formación bonificable, si aplica."
+- Soporte: "Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®. Necesito ayuda con el campus. Estoy teniendo un problema de acceso o funcionamiento y quiero revisar qué puede estar pasando. ¿Me podéis ayudar?"
+
 Para recommended_product:
 - show true solo cuando recomiendes un entrenamiento, catálogo, Programa Base o soporte accionable.
 - type debe ser kit para Prospección o Negociación, programa_base para Programa Base, catalogo para catálogo, soporte para soporte campus o none si no aplica.
@@ -89,7 +106,7 @@ Devuelve SIEMPRE y SOLO JSON válido con esta estructura exacta:
   "lead_type": "individual | empresa | kit | programa_base | workshop | soporte | no_encaja | unknown",
   "ready_for_handoff": true,
   "recommended_next_step": "recomendación breve en español",
-  "whatsapp_summary": "texto listo para enviar a Natalia por WhatsApp",
+  "whatsapp_summary": "mensaje en primera persona que el visitante enviará a Natalia por WhatsApp",
   "recommended_product": {
     "show": true,
     "name": "nombre del entrenamiento recomendado",
@@ -106,7 +123,7 @@ function fallbackPayload(reply = 'Gracias. Para orientarte bien, dime qué neces
     lead_type: 'unknown',
     ready_for_handoff: false,
     recommended_next_step: 'Seguir aclarando el caso antes de derivarlo a Natalia.',
-    whatsapp_summary: 'Solicitud pendiente de completar: la persona necesita aclarar mejor su caso con JetSelling®.',
+    whatsapp_summary: 'Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®. Quiero revisar cuál sería el siguiente paso más adecuado para mi caso. ¿Me puedes ayudar a orientarlo?',
     recommended_product: {
       show: false,
       name: '',
@@ -151,6 +168,20 @@ function normalizeProductUrl(product: RecommendedProduct, safeProductType: Recom
   return PRODUCT_URLS.catalogo;
 }
 
+function normalizeWhatsappSummary(summary: string): string {
+  const trimmed = summary.trim();
+  const fallback = 'Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®. Quiero revisar cuál sería el siguiente paso más adecuado para mi caso. ¿Me puedes ayudar a orientarlo?';
+
+  if (!trimmed) return fallback;
+  if (/^hola\s+natalia/i.test(trimmed)) return trimmed;
+
+  return `Hola Natalia, acabo de hacer el diagnóstico rápido de JetSelling®.
+
+${trimmed}
+
+¿Me ayudas a confirmar cuál sería el siguiente paso más adecuado para mi caso?`;
+}
+
 function sanitizePayload(payload: Partial<AssistantPayload>): AssistantPayload {
   const safeLeadType = leadTypes.includes(payload.lead_type as LeadType) ? (payload.lead_type as LeadType) : 'unknown';
   const product = payload.recommended_product || fallbackPayload().recommended_product;
@@ -161,6 +192,10 @@ function sanitizePayload(payload: Partial<AssistantPayload>): AssistantPayload {
   const productReason = typeof product.reason === 'string' ? product.reason.trim() : '';
   const productUrl = normalizeProductUrl(product as RecommendedProduct, safeProductType);
   const shouldShowProduct = Boolean(product.show && productName && productReason && productUrl && safeProductType !== 'none');
+  const rawWhatsappSummary =
+    typeof payload.whatsapp_summary === 'string' && payload.whatsapp_summary.trim()
+      ? payload.whatsapp_summary.trim()
+      : fallbackPayload().whatsapp_summary;
 
   return {
     reply: typeof payload.reply === 'string' && payload.reply.trim() ? payload.reply.trim() : fallbackPayload().reply,
@@ -170,10 +205,7 @@ function sanitizePayload(payload: Partial<AssistantPayload>): AssistantPayload {
       typeof payload.recommended_next_step === 'string' && payload.recommended_next_step.trim()
         ? payload.recommended_next_step.trim()
         : 'Revisar el resumen y decidir el siguiente paso con Natalia.',
-    whatsapp_summary:
-      typeof payload.whatsapp_summary === 'string' && payload.whatsapp_summary.trim()
-        ? payload.whatsapp_summary.trim()
-        : 'Solicitud recibida desde el asistente de JetSelling® pendiente de completar.',
+    whatsapp_summary: normalizeWhatsappSummary(rawWhatsappSummary),
     recommended_product: {
       show: shouldShowProduct,
       name: productName,
