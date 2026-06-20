@@ -16,6 +16,7 @@ Asistente de prediagnóstico para JetSelling® creado con Next.js App Router. La
   - Soporte campus
   - No encaja ahora
 - Generación de resumen listo para WhatsApp cuando hay contexto suficiente.
+codex/crea-aplicacion-next.js-para-jetselling-lenzix
 - Handoff humano para empresas, equipos, workshops y FUNDAE con el botón “Contactar con Natalia por WhatsApp”.
 
 ## Lógica de recomendación para particulares
@@ -56,6 +57,7 @@ El endpoint devuelve siempre JSON con esta forma:
   }
 }
 ```
+main
 
 ## Variables de entorno
 
