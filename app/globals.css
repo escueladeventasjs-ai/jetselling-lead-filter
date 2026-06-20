@@ -13,7 +13,7 @@
 html, body { margin: 0; min-height: 100%; }
 
 body {
-  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-family: Montserrat, Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
   background:
     radial-gradient(circle at top left, rgba(0, 254, 247, 0.18), transparent 30rem),
     radial-gradient(circle at bottom right, rgba(27, 55, 255, 0.22), transparent 34rem),
@@ -55,9 +55,9 @@ button { cursor: pointer; }
   gap: 10px;
   margin-bottom: 22px;
   color: var(--cyan);
-  font-size: 0.88rem;
-  font-weight: 700;
-  letter-spacing: 0.11em;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.13em;
   text-transform: uppercase;
 }
 
@@ -71,17 +71,17 @@ button { cursor: pointer; }
 
 h1 {
   margin: 0 0 12px;
-  max-width: 720px;
-  font-size: clamp(2rem, 5vw, 4.4rem);
+  max-width: 780px;
+  font-size: clamp(2rem, 5vw, 4.15rem);
   line-height: 0.98;
   letter-spacing: -0.055em;
 }
 
 .subtitle {
-  max-width: 760px;
+  max-width: 800px;
   margin: 0;
   color: var(--muted);
-  font-size: clamp(1rem, 2vw, 1.16rem);
+  font-size: clamp(0.98rem, 1.8vw, 1.12rem);
   line-height: 1.65;
 }
 
@@ -156,10 +156,15 @@ h1 {
 .actions { display: flex; flex-wrap: wrap; gap: 12px; }
 
 .primary-button, .secondary-button, .send-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
   border: 0;
   border-radius: 999px;
-  font-weight: 750;
-  transition: transform 160ms ease, opacity 160ms ease, box-shadow 160ms ease;
+  font-weight: 800;
+  line-height: 1.1;
+  text-decoration: none;
+  transition: transform 160ms ease, opacity 160ms ease, box-shadow 160ms ease, border-color 160ms ease, background 160ms ease;
 }
 
 .primary-button:hover, .secondary-button:hover, .send-button:hover { transform: translateY(-1px); }
@@ -170,14 +175,19 @@ h1 {
   color: #07122d;
   background: var(--cyan);
   box-shadow: 0 12px 34px rgba(0, 254, 247, 0.22);
-  text-decoration: none;
 }
 
 .secondary-button {
   padding: 13px 18px;
   color: var(--white);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
+}
+
+.secondary-button:hover {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(0, 254, 247, 0.46);
 }
 
 .composer {
