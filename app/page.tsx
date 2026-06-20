@@ -1,6 +1,6 @@
 'use client';
 
-import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
+import { FormEvent, MouseEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 type Role = 'assistant' | 'user';
 type ChatMessage = { role: Role; content: string };
@@ -88,6 +88,25 @@ export default function Home() {
     setInput('Me gustaría aclarar un poco más mi caso: ');
   }
 
+  function openWhatsAppPopup(event: MouseEvent<HTMLAnchorElement>) {
+    if (!whatsappHref) return;
+    event.preventDefault();
+
+    const width = 520;
+    const height = 720;
+    const left = Math.max(0, Math.round(window.screenX + (window.outerWidth - width) / 2));
+    const top = Math.max(0, Math.round(window.screenY + (window.outerHeight - height) / 2));
+    const features = `popup=yes,width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`;
+    const popup = window.open(whatsappHref, 'jetselling_whatsapp', features);
+
+    if (!popup) {
+      window.open(whatsappHref, '_blank', 'noopener,noreferrer');
+      return;
+    }
+
+    popup.focus();
+  }
+
   return (
     <main className="main-shell">
       <section className="chat-card" aria-label="Asistente de diagnóstico JetSelling">
@@ -117,7 +136,7 @@ export default function Home() {
                 <a className="primary-button" href={lastResponse.recommended_product.url} target="_blank" rel="noreferrer">
                   Ver entrenamiento recomendado
                 </a>
-                <a className="secondary-button" href={whatsappHref} target="_blank" rel="noreferrer">
+                <a className="secondary-button" href={whatsappHref} onClick={openWhatsAppPopup} target="_blank" rel="noreferrer">
                   Contactar con Natalia por WhatsApp
                 </a>
               </div>
@@ -127,7 +146,7 @@ export default function Home() {
             <div className="handoff-panel">
               <p>{lastResponse.recommended_next_step}</p>
               <div className="actions">
-                <a className="primary-button" href={whatsappHref} target="_blank" rel="noreferrer">
+                <a className="primary-button" href={whatsappHref} onClick={openWhatsAppPopup} target="_blank" rel="noreferrer">
                   Contactar con Natalia por WhatsApp
                 </a>
                 <button className="secondary-button" type="button" onClick={continueClarifying}>
