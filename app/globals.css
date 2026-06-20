@@ -119,6 +119,7 @@ h1 {
   border-bottom-left-radius: 8px;
 }
 
+.recommendation-card,
 .handoff-panel {
   margin-top: 6px;
   align-self: flex-start;
@@ -129,6 +130,27 @@ h1 {
   background: rgba(0, 254, 247, 0.08);
 }
 
+.recommendation-card {
+  border-color: rgba(0, 254, 247, 0.46);
+  background: linear-gradient(145deg, rgba(0, 254, 247, 0.12), rgba(255, 255, 255, 0.075));
+}
+
+.recommendation-kicker {
+  margin: 0 0 8px;
+  color: var(--cyan);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.recommendation-card h2 {
+  margin: 0 0 10px;
+  font-size: clamp(1.35rem, 3vw, 2rem);
+  letter-spacing: -0.035em;
+}
+
+.recommendation-card > p:not(.recommendation-kicker),
 .handoff-panel p { margin: 0 0 14px; color: rgba(255, 255, 255, 0.86); line-height: 1.55; }
 
 .actions { display: flex; flex-wrap: wrap; gap: 12px; }

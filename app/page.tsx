@@ -4,12 +4,22 @@ import { FormEvent, useEffect, useMemo, useRef, useState } from 'react';
 
 type Role = 'assistant' | 'user';
 type ChatMessage = { role: Role; content: string };
+type RecommendedProduct = {
+  show: boolean;
+  name: string;
+  type: 'kit' | 'programa_base' | 'catalogo' | 'soporte' | 'none';
+  reason: string;
+  url: string;
+  cta_label: string;
+};
+
 type ChatResponse = {
   reply: string;
   lead_type: 'individual' | 'empresa' | 'kit' | 'programa_base' | 'workshop' | 'soporte' | 'no_encaja' | 'unknown';
   ready_for_handoff: boolean;
   recommended_next_step: string;
   whatsapp_summary: string;
+  recommended_product?: RecommendedProduct;
   whatsapp_url?: string;
 };
 
@@ -29,9 +39,16 @@ export default function Home() {
   }, [messages, lastResponse]);
 
   const whatsappHref = useMemo(() => {
-    if (!lastResponse?.ready_for_handoff) return '';
+    if (!lastResponse?.whatsapp_summary) return '';
     return lastResponse.whatsapp_url || `https://wa.me/?text=${encodeURIComponent(lastResponse.whatsapp_summary)}`;
   }, [lastResponse]);
+
+  const shouldShowRecommendation = Boolean(
+    lastResponse?.recommended_product?.show &&
+      lastResponse.recommended_product.name &&
+      lastResponse.recommended_product.reason &&
+      lastResponse.recommended_product.url,
+  );
 
   async function submitMessage(event?: FormEvent<HTMLFormElement>) {
     event?.preventDefault();
@@ -91,12 +108,27 @@ export default function Home() {
           {isLoading ? (
             <div className="bubble-row assistant"><div className="bubble">Estoy revisando tu caso con calma…</div></div>
           ) : null}
-          {lastResponse?.ready_for_handoff ? (
+          {shouldShowRecommendation && lastResponse?.recommended_product ? (
+            <div className="recommendation-card">
+              <p className="recommendation-kicker">Entrenamiento recomendado</p>
+              <h2>{lastResponse.recommended_product.name}</h2>
+              <p>{lastResponse.recommended_product.reason}</p>
+              <div className="actions">
+                <a className="primary-button" href={lastResponse.recommended_product.url} target="_blank" rel="noreferrer">
+                  Ver entrenamiento recomendado
+                </a>
+                <a className="secondary-button" href={whatsappHref} target="_blank" rel="noreferrer">
+                  Contactar con Natalia por WhatsApp
+                </a>
+              </div>
+            </div>
+          ) : null}
+          {lastResponse?.ready_for_handoff && !shouldShowRecommendation ? (
             <div className="handoff-panel">
               <p>{lastResponse.recommended_next_step}</p>
               <div className="actions">
                 <a className="primary-button" href={whatsappHref} target="_blank" rel="noreferrer">
-                  Enviar resumen a Natalia por WhatsApp
+                  Contactar con Natalia por WhatsApp
                 </a>
                 <button className="secondary-button" type="button" onClick={continueClarifying}>
                   Seguir aclarando mi caso
