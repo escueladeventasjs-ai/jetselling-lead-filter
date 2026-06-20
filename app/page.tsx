@@ -24,7 +24,7 @@ type ChatResponse = {
 };
 
 const INITIAL_MESSAGE =
-  'Hola, soy el asistente de JetSelling®. Para no darte una respuesta genérica, dime primero: ¿buscas algo para ti, para tu equipo o necesitas ayuda con el campus?';
+  'Hola. Para orientarte bien, dime primero qué necesitas ahora: ¿mejorar algo concreto de tu venta, entrenar a tu equipo o resolver una duda del campus?';
 
 export default function Home() {
   const [messages, setMessages] = useState<ChatMessage[]>([{ role: 'assistant', content: INITIAL_MESSAGE }]);
@@ -90,12 +90,12 @@ export default function Home() {
 
   return (
     <main className="main-shell">
-      <section className="chat-card" aria-label="Asistente de prediagnóstico JetSelling">
+      <section className="chat-card" aria-label="Asistente de diagnóstico JetSelling">
         <header className="hero">
-          <div className="brand"><span className="brand-dot" />JetSelling®</div>
-          <h1>Te ayudamos a encontrar el siguiente paso</h1>
+          <div className="brand"><span className="brand-dot" />Diagnóstico rápido JetSelling®</div>
+          <h1>Dime qué se te atasca en la venta y te digo por dónde empezar.</h1>
           <p className="subtitle">
-            Responde unas preguntas rápidas y vemos si tiene más sentido un Kit, el Programa Base, una propuesta para empresa, un workshop o soporte.
+            Responde en un minuto. Según tu caso, te orientamos hacia el entrenamiento que más sentido tiene ahora: abrir más conversaciones, negociar sin ceder tan rápido, preparar mejor tus reuniones, entrenar a tu equipo o resolver una duda del campus.
           </p>
         </header>
 
@@ -106,7 +106,7 @@ export default function Home() {
             </div>
           ))}
           {isLoading ? (
-            <div className="bubble-row assistant"><div className="bubble">Estoy revisando tu caso con calma…</div></div>
+            <div className="bubble-row assistant"><div className="bubble">Estoy revisando tu caso para orientarte bien…</div></div>
           ) : null}
           {shouldShowRecommendation && lastResponse?.recommended_product ? (
             <div className="recommendation-card">
@@ -144,7 +144,7 @@ export default function Home() {
         <form className="composer" onSubmit={submitMessage}>
           <textarea
             className="input"
-            placeholder="Escribe aquí tu respuesta…"
+            placeholder="Cuéntame en una frase qué se te atasca ahora…"
             value={input}
             onChange={(event) => setInput(event.target.value)}
             onKeyDown={(event) => {
