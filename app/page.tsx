@@ -23,6 +23,37 @@ type ChatResponse = {
   whatsapp_url?: string;
 };
 
+declare global {
+  interface Window {
+    dataLayer?: unknown[];
+    gtag?: (...args: unknown[]) => void;
+  }
+}
+
+const RADAR_STARTED_KEY = 'jetselling_radar_started';
+
+function trackRadarStarted() {
+  try {
+    if (window.sessionStorage.getItem(RADAR_STARTED_KEY)) return;
+    window.sessionStorage.setItem(RADAR_STARTED_KEY, '1');
+  } catch {
+    // La medición debe continuar aunque el navegador bloquee sessionStorage.
+  }
+
+  const params = {
+    event_category: 'engagement',
+    radar_step: 'first_answer',
+    page_location: window.location.href,
+  };
+
+  window.dataLayer = window.dataLayer || [];
+  window.dataLayer.push({ event: 'radar_started', ...params });
+
+  if (typeof window.gtag === 'function') {
+    window.gtag('event', 'radar_started', params);
+  }
+}
+
 const INITIAL_MESSAGE =
   'Hola. Para orientarte bien, dime primero qué necesitas ahora: ¿mejorar algo concreto de tu venta, entrenar a tu equipo o resolver una duda del campus?';
 
@@ -54,6 +85,8 @@ export default function Home() {
     event?.preventDefault();
     const trimmedInput = input.trim();
     if (!trimmedInput || isLoading) return;
+
+    trackRadarStarted();
 
     const nextMessages: ChatMessage[] = [...messages, { role: 'user', content: trimmedInput }];
     setMessages(nextMessages);
